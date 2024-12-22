@@ -1,0 +1,45 @@
+{
+  "name": "AptosSniper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node bot.ts",
+    "start": "node dist/bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@types/node-cron": "^3.0.11",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.33.0",
+    "@panoraexchange/swap-sdk": "^1.0.8",
+    "@pontem/liquidswap-sdk": "^0.7.0",
+    "@scure/bip39": "^1.2.2",
+    "bip39": "^3.1.0",
+    "bip44": "^0.0.1",
+    "dotenv": "^16.3.1",
+    "ed25519-hd-key": "^1.3.0",
+    "ethers": "^6.11.1",
+    "firebase-admin": "^12.0.0",
+    "grammy": "^1.20.3",
+    "moment": "^2.29.4",
+    "node-cache": "^5.1.2",
+    "node-cron": "^3.0.3",
+    "tslib": "^2.6.2",
+    "ws": "^8.16.0"
+  }
+}
