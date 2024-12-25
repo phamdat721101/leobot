@@ -73,16 +73,18 @@ export async function mintVmanta(ctx: any) {
 
   const args = [
     "0x95CeF13441Be50d20cA4558CC0a27B601aC544E5", // MANTA token address
-    parseUnits("3", 18), // amount
+    parseUnits("1", 18), // amount
     0, // channel_id
     4000000, // dstGasForCall
     encodePacked(["uint16", "uint256"], [1, BigInt(4200000)]), // adapterParams
   ];
 
   try {
+    const sendAndCallFee = await contract.estimateSendAndCallFee(...args)
+    console.log("Send fee: ", sendAndCallFee)
     // Send transaction
     const tx = await contract.create_order(...args, {
-      value: parseUnits("0.1", "ether")
+      value: sendAndCallFee as BigInt
     });
 
     const signResp = await signer.signTransaction(tx)
