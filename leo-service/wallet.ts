@@ -1,7 +1,4 @@
 import * as bip39 from "bip39";
-import { accountFromMnemonic } from "./swap";
-import { aptos } from "../leo-web3";
-import { MyContext } from "../bot";
 import { ethers } from "ethers";
 
 export async function generateWallet() {
@@ -17,19 +14,4 @@ export async function generateWallet() {
   }
 
   return { wallet: wallet.address, mnemonic };
-}
-
-export async function getAccountBalances(ctx: MyContext) {
-  try {
-    const balances = await aptos.getAccountCoinsData({
-      accountAddress:
-        ctx.session.wallet_aptos?.accountAddress.toString() as string,
-    });
-
-    ctx.session.balances = balances;
-    return balances;
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
 }

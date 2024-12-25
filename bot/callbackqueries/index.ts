@@ -61,7 +61,7 @@ export async function initiateCallbackQueries() {
       ctx.session.input_tag = ""
       ctx.session.reply = false
       ctx.session.token = ""
-      const wallet = ctx.session.wallet_aptos;
+      const wallet = ctx.session.wallet_leo;
       if (!wallet) {
         await ctx.reply("Start the bot first");
         return;
@@ -82,7 +82,7 @@ export async function initiateCallbackQueries() {
       );
     });    
     bot.callbackQuery("setting_wallet", async (ctx) => {
-      if (!ctx.session.wallet_aptos) {
+      if (!ctx.session.wallet_leo) {
         await ctx.reply("Please start the bot first");
         return;
       }
@@ -98,7 +98,7 @@ export async function initiateCallbackQueries() {
 
     });
     bot.callbackQuery("export_seed_phrase", async (ctx) => {
-      const wallet = ctx.session.wallet_aptos;
+      const wallet = ctx.session.wallet_leo;
       if (!wallet) {
         await ctx.reply("Please start the bot first");
         return;
@@ -167,7 +167,7 @@ export async function initiateCallbackQueries() {
       console.log("Manta resp: ", mantaResp)
     })
     bot.callbackQuery("trade_board", async (ctx) => {
-      const wallet = ctx.session.wallet_aptos;
+      const wallet = ctx.session.wallet_leo;
       if (!wallet) {
         await ctx.reply("Start the bot first");
         return;

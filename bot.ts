@@ -1,11 +1,9 @@
 require("dotenv").config();
 
 import { Bot, Context, session, SessionFlavor } from "grammy";
-import { Ed25519Account } from "@aptos-labs/ts-sdk";
 import { initializeCommands } from "./bot/commands";
 import { initiateCallbackQueries } from "./bot/callbackqueries";
 import { initializeInputs } from "./bot/input";
-import { rpcConfig } from "./leo-web3";
 import { initcache } from "./utils/cache";
 
 interface SessionData {
@@ -28,7 +26,7 @@ interface SessionData {
     slippage: string;
     gasPricedelta: string;
   };
-  wallet_aptos: any;
+  wallet_leo: any;
   costum_amount: boolean;
   address: string;
   sessionset: boolean;
@@ -50,7 +48,7 @@ function initial(): SessionData {
     wallet: "",
     input_tag: "",
     reply: false,
-    wallet_aptos: null,
+    wallet_leo: null,
     sequence_number: 0,
     userid: "",
     currentmsg: 0,
@@ -71,11 +69,9 @@ function initial(): SessionData {
 }
 bot.use(session({ initial }));
 try {
-  rpcConfig();
   initializeCommands();
   initiateCallbackQueries();
   initializeInputs();
-  // initcache();
 } catch (e) {
   console.log(e);
 }

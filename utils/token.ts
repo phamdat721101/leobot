@@ -1,41 +1,7 @@
-import { aptos } from "../leo-web3";
 import { ethers, parseUnits } from "ethers";
 import { solidityPacked as encodePacked } from "ethers";
 import manta_slp_abi from '../abi/manta_slp.json';
 import erc_20_abi from '../abi/erc20.json'
-
-export async function getPool(tokenType: string): Promise<any | null> {
-  try {
-    return await aptos.view({
-      payload: {
-        function: `${process.env.MODULE_ADDR}::pump::get_pool`,
-        typeArguments: [tokenType],
-        functionArguments: []
-      }
-    })
-  } catch (_) {
-    return null
-  };
-}
-
-export async function checkPoolExistence(tokenType: string): Promise<boolean> {
-  const pool = await getPool(tokenType);
-  if (pool) { return true } else { return false };
-}
-
-export const amountAddFee = (rawAmount: bigint, fee: bigint) => {
-  const feePercentage = fee / 100n;
-  return (rawAmount * (100n + feePercentage)) / 100n;
-};
-
-export const getAmountIn = (
-  amountOut: bigint, // b
-  reserveIn: bigint, // x
-  reserverOut: bigint // y
-): bigint => {
-  if (amountOut >= reserverOut) throw new Error('Insufficient liquidity');
-  return (reserveIn * amountOut) / (reserverOut - amountOut) + 1n;
-};
 
 export async function getVtoken(walletAddress: string, tokenAddress: string, url: string){
   // Create a provider (you can use Infura, Alchemy, or any other provider)
@@ -55,7 +21,7 @@ export async function getVtoken(walletAddress: string, tokenAddress: string, url
 export async function mintVmanta(ctx: any) {
   // Create provider and signer
   const provider = new ethers.JsonRpcProvider("https://manta-pacific.drpc.org");
-  const wallet = ctx.session.wallet_aptos
+  const wallet = ctx.session.wallet_leo
   if(!wallet){
     await ctx.reply("Please start the bot") 
     return

@@ -3,7 +3,6 @@ import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 import { FIREBASE_KEY } from "./config";
 
-// const serviceAccount = FIREBASE_KEY || "";
 const serviceAccount = require('../leo-bot.json');
 
 const apps = getApps();

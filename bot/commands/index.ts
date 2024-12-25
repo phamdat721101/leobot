@@ -3,10 +3,8 @@ import { accountFromMnemonic } from "../../leo-service/swap";
 import { bot } from "../../bot";
 import { storeChatAndUserId } from "../../utils/storechatid";
 import { mainmenu_board } from "../keyboard";
-import { aptos } from "../../leo-web3";
 import { ethers } from "ethers";
 import { getVtoken } from "../../utils/token";
-import { util } from "@google-cloud/storage/build/cjs/src/nodejs-common";
 
 export async function initializeCommands() {
   try {
@@ -27,7 +25,7 @@ export async function initializeCommands() {
       const mnm = await storeChatAndUserId(ctx);
       const wallet = await accountFromMnemonic(mnm);
 
-      ctx.session.wallet_aptos = wallet;
+      ctx.session.wallet_leo = wallet;
       const balances = 0;      
 
       const mantaBalance = await getVtoken(wallet.address, "0x95CeF13441Be50d20cA4558CC0a27B601aC544E5", "https://manta-pacific.drpc.org")

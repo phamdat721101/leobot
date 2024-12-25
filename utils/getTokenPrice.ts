@@ -1,16 +1,3 @@
-import { panora_client } from "../leo-service/swap";
-async function getDexTokenPrice(tokenAddress: string) {
-  const res = await fetch(
-    `https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`
-  );
-  const data: any = await res.json();
-
-  const price = data.pairs?.find((pair: any) => pair.chainId === "aptos");
-  const token_info = await panora_client.getPrices({
-    tokenAddress: [tokenAddress as `0x${string}`]
-  })
-  return Number(token_info[0]?.usdPrice) || 0;
-}
 async function getDexTokenPriceNative(tokenAddress: string) {
   const res = await fetch(
     `https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`
@@ -43,4 +30,4 @@ function formatNumber(number: number) {
   }
 }
 
-export { getDexTokenPrice, getDexTokenPriceNative, getTokenMC };
+export { getDexTokenPriceNative, getTokenMC };
