@@ -29,28 +29,10 @@ export async function initcache() {
     const cacheData = {
       userData: user,
       portfolio: portfolio_.docs.find((doc) => doc.id == user.userId)?.data(),
-      // referal: referal_.docs.find((doc) => doc.id == user.userId)?.data(),
       config: config_.docs.find((doc) => doc.id == user.userId)?.data(),
     };
-    // console.log("Cache data", cacheData);
     cache.set(user.userId, cacheData);
   });
 
   bot.start();
 }
-// Call initcache every 1 hour
-
-// // Get a value from the cache
-// const cachedValue = cache.get('key');
-// console.log(cachedValue); // Output: value
-
-// // Check if a key exists in the cache
-// const keyExists = cache.has('key');
-// console.log(keyExists); // Output: true
-
-// // Delete a key from the cache
-// const deleted = cache.del('key');
-// console.log(deleted); // Output: true
-
-// // Clear the entire cache
-// cache.flushAll();

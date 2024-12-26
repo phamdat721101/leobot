@@ -1,6 +1,7 @@
 import { bot } from "../../bot";
 import { mainmenu_board, request_board, setting_board } from "../keyboard";
 import { getVtoken, mintVmanta } from "../../utils/token";
+import { mintxcDOT } from "../../utils/polkadot";
 
 // Define types for our data structure
 interface HolderInfo {
@@ -138,29 +139,8 @@ export async function initiateCallbackQueries() {
       });
     })
     bot.callbackQuery("vdot", async (ctx) =>{
-      const vdotData = data.vDOT;
-      let message = `
-        <b>vDOT Statistics:</b>\n
-        <b>APY:</b> ${vdotData.apy}%\n
-        <b>Base APY:</b> ${vdotData.apyBase}%\n
-        <b>Reward APY:</b> ${vdotData.apyReward}%\n
-        <b>TVL:</b> $${vdotData.tvl.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n
-        <b>TVM:</b> $${vdotData.tvm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n
-        <b>Total Issuance:</b> ${vdotData.totalIssuance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n
-        <b>Total Holders:</b> ${vdotData.holders.toLocaleString()}\n\n
-        <b>Holders by Network:</b>\n
-        `;
-
-      for (const holder of vdotData.holdersList) {
-        message += `<b>${holder.network.charAt(0).toUpperCase() + holder.network.slice(1)}:</b> ${holder.holders.toLocaleString()} holders\n`;
-        message += `More info: <a href="${holder.url}">${holder.url}</a>\n\n`;
-      }
-
-      await ctx.reply(message, {
-        reply_markup: request_board,
-        parse_mode: "HTML",
-        link_preview_options: { is_disabled: true }
-      });
+      let moonBeamResp = await mintxcDOT(ctx)
+      console.log("MintxcDOT resp: ", moonBeamResp)
     })
     bot.callbackQuery("vManta", async (ctx) =>{      
       let mantaResp = await mintVmanta(ctx)
