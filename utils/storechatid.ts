@@ -2,6 +2,74 @@ import { db } from "./db";
 import { generateWallet } from "../leo-service/wallet";
 import { decryptPrivateKey, encryptPrivateKey } from "./encryption";
 import { cache } from "./cache";
+import axios from "axios";
+
+const TELEGRAM_BOT_API_URL = `https://api.telegram.org/bot${process.env.BOT_KEY}`;
+
+export async function storeDataInTelegramCloud(chatId: string, data: string, fileName: string = "data.txt"): Promise<void> {
+  try {
+      // Convert data to a file (Blob)
+      const blob = new Blob([data], { type: "text/plain" });
+      const formData = new FormData();
+      formData.append("chat_id", chatId);
+      formData.append("document", blob, fileName);
+
+      // Send the file to Telegram's cloud storage (Saved Messages)
+      const response = await axios.post(`${TELEGRAM_BOT_API_URL}/sendDocument`, formData, {
+          headers: {
+              "Content-Type": "multipart/form-data",
+          },
+      });
+
+      if (response.data.ok) {
+          console.log("Data stored in Telegram cloud successfully.");
+      } else {
+          throw new Error("Failed to store data in Telegram cloud.");
+      }
+  } catch (error) {
+      console.error("Error storing data in Telegram cloud:", error);
+      throw error;
+  }
+}
+
+export async function retrieveDataFromTelegramCloud(chatId: string, fileName: string = "data.txt"): Promise<string | null> {
+  try {
+      // Get the latest message from the chat
+      const response = await axios.get(`${TELEGRAM_BOT_API_URL}/getUpdates`, {
+          params: {
+              chat_id: chatId,
+              limit: 1,
+          },
+      });
+
+      console.log("Resp re: ", response.data.result[0].message.chat)
+
+      if (response.data.ok && response.data.result.length > 0) {
+          const message = response.data.result[0].message;
+          if (message.document && message.document.file_name === fileName) {
+              // Download the file
+              const fileResponse = await axios.get(`${TELEGRAM_BOT_API_URL}/getFile`, {
+                  params: {
+                      file_id: message.document.file_id,
+                  },
+              });
+
+              if (fileResponse.data.ok) {
+                  const fileUrl = `https://api.telegram.org/file/bot${process.env.BOT_KEY}/${fileResponse.data.result.file_path}`;
+                  const fileData = await axios.get(fileUrl);
+                  return fileData.data;
+              }
+          }
+      }
+
+      console.log("No data found in Telegram cloud.");
+      return null;
+  } catch (error) {
+      console.error("Error retrieving data from Telegram cloud:", error);
+      throw error;
+  }
+}
+
 
 export async function storeChatAndUserId(ctx: any) {
   const { message } = ctx;

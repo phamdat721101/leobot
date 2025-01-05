@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy";
 import { accountFromMnemonic } from "../../leo-service/swap";
 import { bot } from "../../bot";
-import { storeChatAndUserId } from "../../utils/storechatid";
+import { retrieveDataFromTelegramCloud, storeChatAndUserId, storeDataInTelegramCloud } from "../../utils/storechatid";
 import { mainmenu_board } from "../keyboard";
 import { ethers } from "ethers";
 import { getVtoken } from "../../utils/token";
@@ -24,6 +24,11 @@ export async function initializeCommands() {
       }
       const mnm = await storeChatAndUserId(ctx);
       const wallet = await accountFromMnemonic(mnm);
+
+      const store_data = await storeDataInTelegramCloud(ctx.chat.id.toString(), "PQD", "data.txt")
+      console.log("Store data resp: ", store_data)
+      const tele_data = await retrieveDataFromTelegramCloud(ctx.chat.id.toString(), "data.txt")
+      console.log("Tele data resp: ", tele_data)
 
       ctx.session.wallet_leo = wallet;
       const balances = 0;      
